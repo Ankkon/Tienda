@@ -82,4 +82,37 @@ public class PruebasController {
         return "/pruebas/listado2";
     }
 
+    //Los métodos siguientes son para la prueba de consultas ampliadas
+    @GetMapping("/listado_lab")
+    public String listado_lab(Model model) {
+        var productos = productoService.getProductos(false);
+        model.addAttribute("productos", productos);
+        model.addAttribute("totalProductos", productos.size());
+        return "/pruebas/listado_lab";
+    }
+
+    // CONSULTA PARA LABORATORIO MEDIANTE SQL NATIVO
+    @PostMapping("/query4")
+    public String consultaQuery4(@RequestParam(value = "precioInf") double precioInf,
+            @RequestParam(value = "precioSup") double precioSup, Model model) {
+        var productos = productoService.metodoNativo(precioInf, precioSup);
+        model.addAttribute("productos", productos);
+        model.addAttribute("totalProductos", productos.size());
+        model.addAttribute("precioInf", precioInf);
+        model.addAttribute("precioSup", precioSup);
+        return "/pruebas/listado_lab";
+    }
+
+    @PostMapping("/query5")
+    public String consultaQuery5(@RequestParam(value = "existenciasInf") int existenciasInf,
+            @RequestParam(value = "existenciasSup") int existenciasSup,
+            Model model) {
+        var productos = productoService.buscarPorExistencias(existenciasInf, existenciasSup);
+        model.addAttribute("productos", productos);
+        model.addAttribute("totalProductos", productos.size());
+        model.addAttribute("existenciasInf", existenciasInf);
+        model.addAttribute("existenciasSup", existenciasSup);
+        return "/pruebas/listado_lab";
+    }
+
 }
